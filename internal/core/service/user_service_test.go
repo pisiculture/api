@@ -21,14 +21,14 @@ func TestNewUserService(t *testing.T) {
 	r := mock.NewMockUserRepositoryInterface(ctrl)
 	serv := service.NewUserService(r)
 
-	t.Run("New_user_service_success", func(t *testing.T) {
+	t.Run("New_service_user_success", func(t *testing.T) {
 		assert.NotNil(t, serv)
 	})
 
 	t.Run("New_user_sucess", func(t *testing.T) {
 
 		usr := generateUserVO()
-		r.EXPECT().Create(usr).Return(1, nil)
+		r.EXPECT().Create(*usr).Return(1, nil)
 
 		id, err := serv.Create(usr)
 
@@ -36,11 +36,11 @@ func TestNewUserService(t *testing.T) {
 		assert.Nil(t, err)
 	})
 
-	t.Run("New_user_sucess", func(t *testing.T) {
+	t.Run("New_user_error_name_invalid", func(t *testing.T) {
 
 		usr := generateUserVO()
 		usr.Name = ""
-		r.EXPECT().Create(usr).Return(1, nil)
+		r.EXPECT().Create(*usr).Return(1, nil)
 
 		id, err := serv.Create(usr)
 
