@@ -1,11 +1,10 @@
 package service
 
 import (
-	"errors"
-	"time"
-
 	"github.com/pisiculture/internal/core/domain"
 	"github.com/pisiculture/internal/core/ports"
+	"github.com/pisiculture/internal/core/util"
+	"github.com/pisiculture/internal/core/vo"
 )
 
 type UserService struct {
@@ -16,24 +15,30 @@ func NewUserService(r ports.UserRepositoryInterface) *UserService {
 	return &UserService{r: r}
 }
 
-func (usr *UserService) Create(name, email, password string) (int, error) {
-	if name == "" {
-		return 0, errors.New("Param name is not valid.")
+func (usr *UserService) Create(vo *vo.UserVO) (int, error) {
+
+	user := domain.NewUser()
+	user.Name = vo.Name
+	user.Email = vo.Email
+	user.Password = vo.Password
+
+	err := user.Validate()
+	if err != nil {
+		return 0, err
 	}
-	if email == "" {
-		return 0, errors.New("Param e-mail is not valid.")
+
+	err = util.ValidateEmail(user.Email)
+	if err != nil {
+		return 0, err
 	}
-	if password == "" || len(password) < 8 {
-		return 0, errors.New("Param password is not valid.")
-	}
-	date := time.Now()
-	return usr.r.Create(name, email, password, date)
+
+	return usr.r.Create(user)
 }
-func (usr *UserService) Update(id int, name, email, password string) error {
+func (usr *UserService) Update(id int, vo *vo.UserVO) error {
 	return nil
 }
-func (usr *UserService) FindByID(id int) (*domain.UserDomain, error) {
-	return domain.NewUserDomain(), nil
+func (usr *UserService) FindByID(id int) (*domain.User, error) {
+	return domain.NewUser(), nil
 }
 func (usr *UserService) DeleteById(id int) error {
 	return nil

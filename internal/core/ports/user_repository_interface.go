@@ -1,7 +1,12 @@
 package ports
 
-import "time"
+import (
+	"github.com/pisiculture/internal/core/domain"
+)
 
 type UserRepositoryInterface interface {
-	Create(name, email, password string, createdAt time.Time) (int, error)
+	Create(usr *domain.User) (int, error)
+	Update(usr *domain.User) error
+	DeleteById(id int) error
+	FindByID(id int) (*domain.User, error)
 }
