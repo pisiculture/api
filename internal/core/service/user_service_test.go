@@ -1,10 +1,12 @@
 package service_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/pisiculture/infra/mock"
+	"github.com/pisiculture/internal/core/domain"
 	"github.com/pisiculture/internal/core/service"
 	"github.com/pisiculture/internal/core/vo"
 	"github.com/stretchr/testify/assert"
@@ -18,6 +20,7 @@ func TestNewUserService(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
+
 	r := mock.NewMockUserRepositoryInterface(ctrl)
 	serv := service.NewUserService(r)
 
@@ -26,8 +29,9 @@ func TestNewUserService(t *testing.T) {
 	})
 
 	t.Run("New_user_sucess", func(t *testing.T) {
+
 		usr := generateUserVO()
-		r.EXPECT().Create(gomock.Any()).Return(1, nil)
+		r.EXPECT().Save(generateUser()).Return(1, nil)
 
 		id, err := serv.Create(usr)
 		assert.Equal(t, 1, id)
@@ -38,11 +42,10 @@ func TestNewUserService(t *testing.T) {
 
 		usr := generateUserVO()
 		usr.Name = ""
-		r.EXPECT().Create(gomock.Any()).Return(1, nil)
 
 		id, err := serv.Create(usr)
 
-		assert.Equal(t, id, 0)
+		assert.Equal(t, 0, id)
 		assert.NotNil(t, err)
 	})
 
@@ -50,7 +53,6 @@ func TestNewUserService(t *testing.T) {
 
 		usr := generateUserVO()
 		usr.Email = ""
-		r.EXPECT().Create(gomock.Any()).Return(1, nil)
 
 		id, err := serv.Create(usr)
 
@@ -62,7 +64,17 @@ func TestNewUserService(t *testing.T) {
 
 		usr := generateUserVO()
 		usr.Password = ""
-		r.EXPECT().Create(gomock.Any()).Return(1, nil)
+
+		id, err := serv.Create(usr)
+
+		assert.Equal(t, id, 0)
+		assert.NotNil(t, err)
+	})
+
+	t.Run("New_user_error_database", func(t *testing.T) {
+
+		usr := generateUserVO()
+		r.EXPECT().Save(generateUser()).Return(0, errors.New("erro database"))
 
 		id, err := serv.Create(usr)
 
@@ -71,10 +83,16 @@ func TestNewUserService(t *testing.T) {
 	})
 }
 
-func generateUserVO() *vo.UserVO {
-	usr := vo.NewUserVO()
-	usr.Name = "Djonatan Willenz"
-	usr.Email = "djonatanhorus@gmail.com"
-	usr.Password = "werwnroweirw"
-	return usr
+func generateUserVO() vo.UserVO {
+	return vo.UserVO{
+		Name:     "Djonatan Willenz",
+		Email:    "djonatanhorus@gmail.com",
+		Password: "werwnroweirw"}
+}
+
+func generateUser() domain.User {
+	return domain.User{
+		Name:     "Djonatan Willenz",
+		Email:    "djonatanhorus@gmail.com",
+		Password: "werwnroweirw"}
 }

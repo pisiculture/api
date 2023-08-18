@@ -34,21 +34,6 @@ func (m *MockUserRepositoryInterface) EXPECT() *MockUserRepositoryInterfaceMockR
 	return m.recorder
 }
 
-// Create mocks base method.
-func (m *MockUserRepositoryInterface) Create(usr *domain.User) (int, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", usr)
-	ret0, _ := ret[0].(int)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Create indicates an expected call of Create.
-func (mr *MockUserRepositoryInterfaceMockRecorder) Create(usr interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserRepositoryInterface)(nil).Create), usr)
-}
-
 // DeleteById mocks base method.
 func (m *MockUserRepositoryInterface) DeleteById(id int) error {
 	m.ctrl.T.Helper()
@@ -78,16 +63,17 @@ func (mr *MockUserRepositoryInterfaceMockRecorder) FindByID(id interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockUserRepositoryInterface)(nil).FindByID), id)
 }
 
-// Update mocks base method.
-func (m *MockUserRepositoryInterface) Update(usr *domain.User) error {
+// Save mocks base method.
+func (m *MockUserRepositoryInterface) Save(usr domain.User) (int, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", usr)
-	ret0, _ := ret[0].(error)
-	return ret0
+	ret := m.ctrl.Call(m, "Save", usr)
+	ret0, _ := ret[0].(int)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockUserRepositoryInterfaceMockRecorder) Update(usr interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockUserRepositoryInterfaceMockRecorder) Save(usr interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserRepositoryInterface)(nil).Update), usr)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockUserRepositoryInterface)(nil).Save), usr)
 }

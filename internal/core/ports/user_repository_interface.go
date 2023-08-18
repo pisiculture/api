@@ -5,8 +5,7 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	Create(usr *domain.User) (int, error)
-	Update(usr *domain.User) error
+	Save(usr domain.User) (int, error)
 	DeleteById(id int) error
 	FindByID(id int) (*domain.User, error)
 }

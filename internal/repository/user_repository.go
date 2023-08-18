@@ -1,11 +1,13 @@
 package repository
 
-import "time"
+import (
+	"github.com/pisiculture/internal/core/vo"
+)
 
 type UserRepository struct {
 }
 
-func (usr *UserRepository) Create(name string, email string, password string, createdAt time.Time) (int, error) {
+func (usr *UserRepository) Save(vo *vo.UserVO) (int, error) {
 
 	return 1, nil
 }
