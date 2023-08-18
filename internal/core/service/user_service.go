@@ -31,7 +31,6 @@ func (usr *UserService) Create(vo *vo.UserVO) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-
 	return usr.r.Create(user)
 }
 func (usr *UserService) Update(id int, vo *vo.UserVO) error {

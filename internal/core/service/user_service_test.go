@@ -26,12 +26,10 @@ func TestNewUserService(t *testing.T) {
 	})
 
 	t.Run("New_user_sucess", func(t *testing.T) {
-
 		usr := generateUserVO()
-		r.EXPECT().Create(*usr).Return(1, nil)
+		r.EXPECT().Create(gomock.Any()).Return(1, nil)
 
 		id, err := serv.Create(usr)
-
 		assert.Equal(t, 1, id)
 		assert.Nil(t, err)
 	})
@@ -40,13 +38,36 @@ func TestNewUserService(t *testing.T) {
 
 		usr := generateUserVO()
 		usr.Name = ""
-		r.EXPECT().Create(*usr).Return(1, nil)
+		r.EXPECT().Create(gomock.Any()).Return(1, nil)
 
 		id, err := serv.Create(usr)
 
 		assert.Equal(t, id, 0)
 		assert.NotNil(t, err)
+	})
 
+	t.Run("New_user_error_email_invalid", func(t *testing.T) {
+
+		usr := generateUserVO()
+		usr.Email = ""
+		r.EXPECT().Create(gomock.Any()).Return(1, nil)
+
+		id, err := serv.Create(usr)
+
+		assert.Equal(t, id, 0)
+		assert.NotNil(t, err)
+	})
+
+	t.Run("New_user_error_password_invalid", func(t *testing.T) {
+
+		usr := generateUserVO()
+		usr.Password = ""
+		r.EXPECT().Create(gomock.Any()).Return(1, nil)
+
+		id, err := serv.Create(usr)
+
+		assert.Equal(t, id, 0)
+		assert.NotNil(t, err)
 	})
 }
 

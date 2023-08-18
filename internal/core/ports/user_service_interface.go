@@ -5,8 +5,8 @@ import (
 )
 
 type UserServiceInterface interface {
-	Create(vo vo.UserVO) (int, error)
-	Update(id int, vo vo.UserVO) error
-	FindByID(id int) (vo.UserVO, error)
+	Create(vo *vo.UserVO) (int, error)
+	Update(id int, vo *vo.UserVO) error
+	FindByID(id int) (*vo.UserVO, error)
 	DeleteById(id int) error
 }
